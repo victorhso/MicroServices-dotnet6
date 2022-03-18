@@ -26,6 +26,10 @@ namespace GeekShopping.ProductAPI.Controllers
             return Ok(produto);
         }
 
+        /// <summary>
+        /// Lista todos os Produtos
+        /// </summary>
+        /// <returns>Os Produtos</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProdutoVO>>> ListarProdutos()
         {
@@ -35,6 +39,38 @@ namespace GeekShopping.ProductAPI.Controllers
                 return NotFound();
 
             return Ok(produto);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ProdutoVO>> CadastrarProduto(ProdutoVO produtoVO)
+        {
+            if (produtoVO == null)
+                return BadRequest();
+
+            var produto = await _repository.Criar(produtoVO);
+
+            return Ok(produto);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<ProdutoVO>> AtualizarProduto(ProdutoVO produtoVO)
+        {
+            if (produtoVO == null)
+                return BadRequest();
+
+            var produto = await _repository.Atualizar(produtoVO);
+            return Ok(produto);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ProdutoVO>> DeletarProduto(long id)
+        {
+            var status = await _repository.Deletar(id);
+
+            if (!status)
+                return BadRequest();
+
+            return Ok(status);
         }
     }
 }
